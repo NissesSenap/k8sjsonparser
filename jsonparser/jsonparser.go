@@ -33,16 +33,16 @@ type Labels struct {
 It should start with a capital letter.
 */
 
-func readjson(filename string) []byte {
+func readjson(filename *string) []byte {
 
-	jsonFile, err := os.Open(filename)
+	jsonFile, err := os.Open(*filename)
 	// if we os.Open returns an error then handle it
 	if err != nil {
 		fmt.Println(err)
 		os.Exit(2)
 	}
 
-	fmt.Println("Successfully Opened " + filename)
+	fmt.Println("Successfully Opened " + *filename)
 	// defer the closing of our jsonFile so that we can parse it later on
 	defer jsonFile.Close()
 
@@ -56,7 +56,8 @@ func readjson(filename string) []byte {
 func Parsejson() string {
 
 	var items Items
-	byteValue := readjson("small_svc.json")
+	myfile := "jsonfiles/small_svc.json"
+	byteValue := readjson(&myfile)
 	json.Unmarshal(byteValue, &items)
 
 	for i := 0; i < len(items.Items); i++ {

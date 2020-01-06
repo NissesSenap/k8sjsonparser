@@ -14,3 +14,4 @@ In the long run i plan to createa a cli to call on this application as well but 
 - [ ] Read all files from a folder
 - [ ] Create cli
 - [ ] Add tests
+- [ ] Should the Structs be "global", find some best practice
