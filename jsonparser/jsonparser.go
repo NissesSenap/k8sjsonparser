@@ -33,6 +33,30 @@ type Labels struct {
 It should start with a capital letter.
 */
 
+// ReadDir reads the directory named by dirname and returns
+// a list of directory entries sorted by filename.
+func readDir(dirname string) ([]string, error) {
+	f, err := os.Open(dirname)
+	if err != nil {
+		return nil, err
+	}
+	list, err := f.Readdir(-1)
+	f.Close()
+	if err != nil {
+		return nil, err
+	}
+	/* I have no need for the sort but it's good to have for the future
+	sort.Slice(list, func(i, j int) bool { return list[i].Name() < list[j].Name() })
+	*/
+	var files []string
+
+	for _, file := range list {
+		files = append(files, file.Name())
+	}
+
+	return files, nil
+}
+
 func readjson(filename *string) []byte {
 
 	jsonFile, err := os.Open(*filename)
@@ -53,18 +77,22 @@ func readjson(filename *string) []byte {
 }
 
 // Parsejson stuff
-func Parsejson() string {
+func Parsejson(foldername string) string {
 
-	var items Items
-	myfile := "jsonfiles/small_svc.json"
-	byteValue := readjson(&myfile)
-	json.Unmarshal(byteValue, &items)
+	myfiles, _ := readDir(foldername)
 
-	for i := 0; i < len(items.Items); i++ {
-		fmt.Println("Item APIVersion " + items.Items[i].APIVersion)
-		fmt.Println("Item Kind " + items.Items[i].Kind)
-		fmt.Println("Item Metadata " + items.Items[i].Metadata.Name)
+	for i := 0; i < len(myfiles); i++ {
+		var items Items
+		myfile := "jsonfiles/" + myfiles[i]
+
+		byteValue := readjson(&myfile)
+		json.Unmarshal(byteValue, &items)
+
+		for i := 0; i < len(items.Items); i++ {
+			fmt.Println("Item APIVersion " + items.Items[i].APIVersion)
+			fmt.Println("Item Kind " + items.Items[i].Kind)
+			fmt.Println("Item Metadata " + items.Items[i].Metadata.Name)
+		}
 	}
-
 	return "hello"
 }

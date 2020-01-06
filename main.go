@@ -7,6 +7,11 @@ import (
 )
 
 func main() {
-	// migrate everything over to the package
-	fmt.Println(jsonparser.Parsejson())
+	/* Scan the folder that is defined in Parsejson
+	returns a list.
+	Send that list to be read by readjson
+	Unmarshall the result and print it all.
+	*/
+
+	fmt.Println(jsonparser.Parsejson("jsonfiles"))
 }
