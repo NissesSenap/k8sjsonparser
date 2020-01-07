@@ -10,7 +10,7 @@ In the long run i plan to createa a cli to call on this application as well but 
 ## TODO
 
 - [x] Move json parser to a seperate package
-- [ ] Use channels/go functions to parse json
+- [x] Use channels/go functions to parse json
 - [x] Read all files from a folder
 - [ ] Create cli
 - [ ] Add tests

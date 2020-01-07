@@ -34,7 +34,7 @@ It should start with a capital letter.
 */
 
 // ReadDir reads the directory named by dirname and returns
-// a list of directory entries sorted by filename.
+// a list of directory entries
 func readDir(dirname string) ([]string, error) {
 	f, err := os.Open(dirname)
 	if err != nil {
@@ -57,12 +57,16 @@ func readDir(dirname string) ([]string, error) {
 	return files, nil
 }
 
-func readjson(filename *string) []byte {
+func readjson(channel chan []byte, filename *string) {
 
 	jsonFile, err := os.Open(*filename)
 	// if we os.Open returns an error then handle it
 	if err != nil {
 		fmt.Println(err)
+		/* TODO  how should i handle errors when i do channels?
+		I don't want to do an exit here since i read multiple files.
+		Feels like i should return them or is just a log the standard way?
+		*/
 		os.Exit(2)
 	}
 
@@ -72,21 +76,25 @@ func readjson(filename *string) []byte {
 
 	// read our opened jsonFile as a byte array.
 	byteValue, _ := ioutil.ReadAll(jsonFile)
-
-	return byteValue
+	channel <- byteValue
 }
 
 // Parsejson stuff
-func Parsejson(foldername string) string {
+func Parsejson(foldername string) {
 
 	myfiles, _ := readDir(foldername)
 
+	// Create the channel
+	channel := make(chan []byte)
+
 	for i := 0; i < len(myfiles); i++ {
 		var items Items
-		myfile := "jsonfiles/" + myfiles[i]
+		// TODO There is probably some nice path lib to make this look better.
+		myfile := foldername + "/" + myfiles[i]
 
-		byteValue := readjson(&myfile)
-		json.Unmarshal(byteValue, &items)
+		go readjson(channel, &myfile)
+
+		json.Unmarshal(<-channel, &items)
 
 		for i := 0; i < len(items.Items); i++ {
 			fmt.Println("Item APIVersion " + items.Items[i].APIVersion)
@@ -94,5 +102,4 @@ func Parsejson(foldername string) string {
 			fmt.Println("Item Metadata " + items.Items[i].Metadata.Name)
 		}
 	}
-	return "hello"
 }

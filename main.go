@@ -1,8 +1,6 @@
 package main
 
 import (
-	"fmt"
-
 	"github.com/NissesSenap/k8sjsonparser/jsonparser"
 )
 
@@ -13,5 +11,5 @@ func main() {
 	Unmarshall the result and print it all.
 	*/
 
-	fmt.Println(jsonparser.Parsejson("jsonfiles"))
+	jsonparser.Parsejson("jsonfiles")
 }
