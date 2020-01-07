@@ -86,6 +86,7 @@ func Parsejson(foldername string) {
 
 	// Create the channel
 	channel := make(chan []byte)
+	defer close(channel)
 
 	for i := 0; i < len(myfiles); i++ {
 		var items Items
