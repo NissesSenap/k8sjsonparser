@@ -63,11 +63,9 @@ func readjson(channel chan []byte, filename *string) {
 	// if we os.Open returns an error then handle it
 	if err != nil {
 		fmt.Println(err)
-		/* TODO  how should i handle errors when i do channels?
-		I don't want to do an exit here since i read multiple files.
-		Feels like i should return them or is just a log the standard way?
+		/* TODO should i handle the print/log the errors here or should
+		I have a channel where i send back the error.
 		*/
-		os.Exit(2)
 	}
 
 	fmt.Println("Successfully Opened " + *filename)
@@ -95,7 +93,10 @@ func Parsejson(foldername string) {
 
 		go readjson(channel, &myfile)
 
-		json.Unmarshal(<-channel, &items)
+		err := json.Unmarshal(<-channel, &items)
+		if err != nil {
+			fmt.Println(err)
+		}
 
 		for i := 0; i < len(items.Items); i++ {
 			fmt.Println("Item APIVersion " + items.Items[i].APIVersion)

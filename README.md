@@ -7,6 +7,8 @@ I will probably focus on creating something easy like a service and not much els
 
 In the long run i plan to createa a cli to call on this application as well but for now a go run will have to do the trick.
 
+Is it worth setting up a seperate error channel https://www.atatus.com/blog/goroutines-error-handling/?
+
 ## TODO
 
 - [x] Move json parser to a seperate package
