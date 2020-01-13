@@ -35,7 +35,7 @@ It should start with a capital letter.
 
 // ReadDir reads the directory named by dirname and returns
 // a list of directory entries
-func readDir(dirname string) ([]string, error) {
+func ReadDir(dirname string) ([]string, error) {
 	f, err := os.Open(dirname)
 	if err != nil {
 		return nil, err
@@ -78,9 +78,7 @@ func readjson(channel chan []byte, filename *string) {
 }
 
 // Parsejson stuff
-func Parsejson(foldername string) {
-
-	myfiles, _ := readDir(foldername)
+func Parsejson(foldername string, myfiles []string) {
 
 	// Create the channel
 	channel := make(chan []byte)

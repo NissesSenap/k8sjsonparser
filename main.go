@@ -1,6 +1,9 @@
 package main
 
 import (
+	"fmt"
+	"os"
+
 	"github.com/NissesSenap/k8sjsonparser/jsonparser"
 )
 
@@ -11,5 +14,12 @@ func main() {
 	Unmarshall the result and print it all.
 	*/
 
-	jsonparser.Parsejson("jsonfiles")
+	foldername := "jsonfiles"
+	myfiles, err := jsonparser.ReadDir(foldername)
+	if err != nil {
+		fmt.Println(err)
+		os.Exit(2)
+	}
+	jsonparser.Parsejson(foldername, myfiles)
+
 }
