@@ -9,6 +9,14 @@ In the long run i plan to createa a cli to call on this application as well but 
 
 Is it worth setting up a seperate error channel https://www.atatus.com/blog/goroutines-error-handling/?
 
+## Basic commands
+
+I don't program enough so i forget basic commands.
+
+```go run main.go```
+
+```go test ./...```
+
 ## TODO
 
 - [x] Move json parser to a seperate package
