@@ -13,9 +13,26 @@ Is it worth setting up a seperate error channel https://www.atatus.com/blog/goro
 
 I don't program enough so i forget basic commands.
 
-```go run main.go```
+```shell
 
-```go test ./...```
+# Start application
+go run main.go
+
+# Run tests
+go test ./...
+
+# Vet examines Go source code and reports suspicious constructs
+# Allways good to run on all code bases
+go vet
+```
+
+## Tips
+
+### Add parallel testing
+
+If your tests can handle it add bellow to get
+your application to run on all your cores
+```t.parallel()```
 
 ## TODO
 
