@@ -37,42 +37,46 @@ func TestReadDirError(t *testing.T) {
 	}
 }
 
-func TestReadJson(t *testing.T) {
-	// var expectedByte []byte
-	myfile := "testdata/small_svc.json"
-
-	// Create channel
+// Helper test function to get the bytes out of the files.
+func getBytes(myfile string) []byte {
 	channel := make(chan []byte)
 	defer close(channel)
 
 	// Send data to readjson
 	go readjson(channel, &myfile)
 	testByte := <-channel
+	return testByte
 
+}
+
+func TestStuff(t *testing.T) {
+	myfile := "testdata/small_svc.json"
+	testByte := getBytes(myfile)
 	// Read the file in the test
 	jsonFile, _ := os.Open(myfile)
 	defer jsonFile.Close()
 	expectedByte, _ := ioutil.ReadAll(jsonFile)
 
 	// Compare the two []bytes if 0 it's the same data
-	lala := bytes.Compare(testByte, expectedByte)
+	bytesCompareBool := bytes.Compare(testByte, expectedByte)
 
-	if lala != 0 {
+	if bytesCompareBool != 0 {
 		t.Errorf("Bytes is not the same: %v", myfile)
 	}
 }
 
 /*
+Hmm *Item is not the same as Item...
+Look in to it later.
+
 func TestParsejson(t *testing.T) {
-	// När du kan jämföra data som är i filerna så har du något du kan testa.
-	Parsejson("testdata", []string{"small_svc.json"})
-
+	myfile := "testdata/small_svc.json"
+	testByte := getBytes(myfile)
+	var items Item
+	json.Unmarshal(testByte, &items)
+	myList := Parsejson("testdata", []string{"small_svc.json"})
+	if myList[0] != &items {
+		t.Errorf("Structs is not the same: %v", &items)
+	}
 }
-*/
-
-/* Känns som att man borde testa att ens structar blir rätt.
-Ska jag bara skicka in data som är likannade och kolla att det är rätt?
-
-Efter detta så är det läge att antingen börja med CLI (flag) eller
-API calls till k8s.
 */
