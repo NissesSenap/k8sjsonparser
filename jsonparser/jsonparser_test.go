@@ -61,3 +61,18 @@ func TestReadJson(t *testing.T) {
 		t.Errorf("Bytes is not the same: %v", myfile)
 	}
 }
+
+/*
+func TestParsejson(t *testing.T) {
+	// När du kan jämföra data som är i filerna så har du något du kan testa.
+	Parsejson("testdata", []string{"small_svc.json"})
+
+}
+*/
+
+/* Känns som att man borde testa att ens structar blir rätt.
+Ska jag bara skicka in data som är likannade och kolla att det är rätt?
+
+Efter detta så är det läge att antingen börja med CLI (flag) eller
+API calls till k8s.
+*/

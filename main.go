@@ -20,6 +20,14 @@ func main() {
 		fmt.Println(err)
 		os.Exit(2)
 	}
-	jsonparser.Parsejson(foldername, myfiles)
+	myitems := jsonparser.Parsejson(foldername, myfiles)
 
+	// Print out the json files in a human readable format.
+	for i := 0; i < len(myitems); i++ {
+		data, err := jsonparser.ReadItem(myitems[i])
+		if err != nil {
+			fmt.Printf("Soemthing wen't wrong creating the json string %v", err)
+		}
+		fmt.Println(data)
+	}
 }

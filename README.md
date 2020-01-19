@@ -7,24 +7,42 @@ I will probably focus on creating something easy like a service and not much els
 
 In the long run i plan to createa a cli to call on this application as well but for now a go run will have to do the trick.
 
-Is it worth setting up a seperate error channel https://www.atatus.com/blog/goroutines-error-handling/?
-
 ## Basic commands
 
 I don't program enough so i forget basic commands.
 
+### Start application
+
+```go run main.go```
+
+### Run tests
+
+```go test ./...```
+
+### Vet deeper test of "syntax"
+
+Vet examines Go source code and reports suspicious constructs
+Allways good to run on all code bases
+
+```go vet```
+
+### Run tests + coverage
+
+```go test ./... -cover```
+
+### Visualize test coverage html
+
 ```shell
+go test ./... -coverprofile=coverage.out
 
-# Start application
-go run main.go
-
-# Run tests
-go test ./...
-
-# Vet examines Go source code and reports suspicious constructs
-# Allways good to run on all code bases
-go vet
+go tool cover -html=coverage.out
 ```
+
+### Find potential memory leaks
+
+-race tests to see if memory is used at the same time.
+
+```go test -race ./...```
 
 ## Tips
 
@@ -32,7 +50,14 @@ go vet
 
 If your tests can handle it add bellow to get
 your application to run on all your cores
+
 ```t.parallel()```
+
+## Questions for my self
+
+Is it worth setting up a seperate [error channel](https://www.atatus.com/blog/goroutines-error-handling/)?
+
+Talking to an old colleague it's better to use [error groups](https://godoc.org/golang.org/x/sync/errgroup)
 
 ## TODO
 

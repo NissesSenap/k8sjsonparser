@@ -25,13 +25,13 @@ type Metadata struct {
 	Namespace string `json:"namespace"`
 }
 
+/* TODO
+To enable us to grab any value from Labels it should be a map.
+https://www.sohamkamani.com/blog/2017/10/18/parsing-json-in-golang/#unstructured-data-decoding-json-to-maps
+*/
 type Labels struct {
 	App string `json:"app"`
 }
-
-/*`getValue` should be `GetValue` to be exposed to other packages.
-It should start with a capital letter.
-*/
 
 // ReadDir reads the directory named by dirname and returns
 // a list of directory entries
@@ -57,6 +57,13 @@ func ReadDir(dirname string) ([]string, error) {
 	return files, nil
 }
 
+// ReadItem marshalls the Struct Items and return a string to make it human readable.
+func ReadItem(myitem Items) (string, error) {
+	data, err := json.Marshal(myitem)
+	// Notice the string convertion
+	return string(data), err
+}
+
 func readjson(channel chan []byte, filename *string) {
 
 	jsonFile, err := os.Open(*filename)
@@ -65,6 +72,7 @@ func readjson(channel chan []byte, filename *string) {
 		fmt.Println(err)
 		/* TODO should i handle the print/log the errors here or should
 		I have a channel where i send back the error.
+		Use: https://godoc.org/golang.org/x/sync/errgroup
 		*/
 	}
 
@@ -78,12 +86,13 @@ func readjson(channel chan []byte, filename *string) {
 }
 
 // Parsejson stuff
-func Parsejson(foldername string, myfiles []string) {
+func Parsejson(foldername string, myfiles []string) []Items {
 
 	// Create the channel
 	channel := make(chan []byte)
 	defer close(channel)
 
+	var listItems []Items
 	for i := 0; i < len(myfiles); i++ {
 		var items Items
 		// TODO There is probably some nice path lib to make this look better.
@@ -93,13 +102,21 @@ func Parsejson(foldername string, myfiles []string) {
 
 		err := json.Unmarshal(<-channel, &items)
 		if err != nil {
-			fmt.Println(err)
+			fmt.Printf("Unable to parse %v, due to error: %v", myfile, err)
+			// Using continue to jump out of the loop.
+			continue
 		}
 
-		for i := 0; i < len(items.Items); i++ {
-			fmt.Println("Item APIVersion " + items.Items[i].APIVersion)
-			fmt.Println("Item Kind " + items.Items[i].Kind)
-			fmt.Println("Item Metadata " + items.Items[i].Metadata.Name)
-		}
+		/*
+			If you want to grab a specific value from the unmarshalled json.
+
+			for i := 0; i < len(items.Items); i++ {
+				fmt.Println("Item APIVersion " + items.Items[i].APIVersion)
+				fmt.Println("Item Kind " + items.Items[i].Kind)
+				fmt.Println("Item Metadata " + items.Items[i].Metadata.Name)
+			}
+		*/
+		listItems = append(listItems, items)
 	}
+	return listItems
 }
